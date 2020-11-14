@@ -19,13 +19,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/test', 'ClothesController@test');
-Route::get('/clothes/get', 'ClothesController@index');
-Route::post('/clothes/add', 'ClothesController@add');
+Route::middleware(['cors'])->group(function () {
+    Route::get('/test', 'ClothesController@test');
+    Route::get('/clothes/get', 'ClothesController@index');
+    Route::post('/clothes/add', 'ClothesController@add');
 
-Route::get('/tag/all', 'TagController@index');
-
+    Route::get('/tag/all', 'TagController@index');
+});
+/*
 Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
     Route::get('/login/{service}', 'SocialLoginController@redirect');
     Route::get('/login/{service}/callback', 'SocialLoginController@callback');
 });
+*/
