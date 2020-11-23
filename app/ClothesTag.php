@@ -3,9 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-
-class ClothesTag extends Model
+class ClothesTag extends Pivot
 {
     //
     protected $table = 'clothes_tag';

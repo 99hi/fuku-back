@@ -23,6 +23,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/test', 'ClothesController@test');
     Route::get('/clothes/get', 'ClothesController@index');
     Route::post('/clothes/add', 'ClothesController@add');
+    Route::put('/clothes/update/{id}', 'ClothesController@update');
 
     Route::get('/tag/all', 'TagController@index');
 });

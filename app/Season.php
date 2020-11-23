@@ -9,7 +9,8 @@ class Season extends Model
     //
     public $timestamps = false;
     
-    public function clothes() {
+    public function clothes()
+    {
         return $this->belongsToMany('App\Clothes', 'clothes_seasons');
     }
 }
