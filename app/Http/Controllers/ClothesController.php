@@ -17,7 +17,13 @@ class ClothesController extends Controller
         $categories = Category::select('name')->get();
         $clothesList = [];
         foreach ($categories as $category) {
-            $clothes = Clothes::select('id', 'url', 'category', 'color', 'created_at', 'updated_at')->with('seasons:name')->with('tags:name')->where('category', $category->name)->where('user_id', 1)->orderBy('created_at', 'desc')->get();
+            $clothes = Clothes::select('id', 'url', 'category', 'color', 'cloudinary_id', 'created_at', 'updated_at')
+                                ->with('seasons:name')
+                                ->with('tags:name')
+                                ->where('category', $category->name)
+                                ->where('user_id', 1)
+                                ->orderBy('created_at', 'desc')
+                                ->get();
             array_push($clothesList, $clothes);
         }
 
@@ -33,6 +39,7 @@ class ClothesController extends Controller
             $newClothes->url = $request->url;
             $newClothes->category = $request->category;
             $newClothes->color = $request->color;
+            $newClothes->cloudinary_id = $request->cloudinary_id;
             $newClothes->save();
 
             //中間テーブルに追加
@@ -82,5 +89,11 @@ class ClothesController extends Controller
             DB::rollback();
             return "エラー：".$e;
         }
+    }
+
+    public function clothesCoordinations($id)
+    {
+        $coordinations = Clothes::select('id')->with('coordinations')->where('id', $id)->get();
+        return $coordinations;
     }
 }

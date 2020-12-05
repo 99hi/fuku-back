@@ -1,5 +1,6 @@
 <?php
 
+use App\Category;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,9 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserTableSeeder::class,
             TagTableSeeder::class,
-            //ClothesTableSeeder::class,
-            //Clothes_TagTableSeeder::class,
-            SeasonTableSeeder::class
+            SeasonTableSeeder::class,
+            CategoryTableSeeder::class
         ]);
     }
 }

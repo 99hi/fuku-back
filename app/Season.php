@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Season extends Model
 {
     //
+    protected $hidden = ['pivot'];
     public $timestamps = false;
     
     public function clothes()

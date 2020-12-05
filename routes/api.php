@@ -24,8 +24,12 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/clothes/get', 'ClothesController@index');
     Route::post('/clothes/add', 'ClothesController@add');
     Route::put('/clothes/update/{id}', 'ClothesController@update');
+    Route::get('/clothes/{id}/coordinations', 'ClothesController@clothesCoordinations');
 
     Route::get('/tag/all', 'TagController@index');
+
+    Route::get('/coordination/get', 'CoordinationController@index');
+    Route::post('/coordination/add', 'CoordinationController@add');
 });
 /*
 Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
