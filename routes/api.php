@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ClothesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,25 +14,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::middleware(['cors'])->group(function () {
-    Route::get('/test', 'ClothesController@test');
-    Route::get('/clothes/get', 'ClothesController@index');
-    Route::post('/clothes/add', 'ClothesController@add');
-    Route::put('/clothes/update/{id}', 'ClothesController@update');
-    Route::get('/clothes/{id}/coordinations', 'ClothesController@clothesCoordinations');
+    Route::middleware(['auth:api'])->group(function() {
+        Route::get('/user', 'UserController@user');
+    });
+        Route::get('/test', 'ClothesController@test');
+        Route::get('/clothes/get', 'ClothesController@index');
+        Route::post('/clothes/add', 'ClothesController@add');
+        Route::put('/clothes/update/{id}', 'ClothesController@update');
+        Route::get('/clothes/{id}/coordinations', 'ClothesController@clothesCoordinations');
+        Route::get('/tag/all', 'TagController@index');
+        Route::get('/coordination/get', 'CoordinationController@index');
+        Route::post('/coordination/add', 'CoordinationController@add');
+        Route::get('/share', 'ShareCodeController@show');
+        Route::post('/share/add', 'ShareCodeController@add');
+        Route::get('/share/users', 'ShareCodeController@shareUser');
+    //Route::get('/share?code={code}', 'ClothesController@shareCloset');
+    
+    // }); //ログイン済み可能
 
-    Route::get('/tag/all', 'TagController@index');
+    Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
+        Route::get('/login/{service}', 'SocialLoginController@redirect');
+        Route::get('/login/{service}/callback', 'SocialLoginController@callback');
+    });
+});
 
-    Route::get('/coordination/get', 'CoordinationController@index');
-    Route::post('/coordination/add', 'CoordinationController@add');
-});
-/*
-Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
-    Route::get('/login/{service}', 'SocialLoginController@redirect');
-    Route::get('/login/{service}/callback', 'SocialLoginController@callback');
-});
-*/
+
+
+
+
+
+

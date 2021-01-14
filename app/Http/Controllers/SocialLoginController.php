@@ -6,22 +6,27 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\User;
 use Auth;
+//use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Tymon\JWTAuth\JWTAuth;
 
 class SocialLoginController extends Controller{
 
-  protected $auth;
+  // protected $auth;
 
-  public function __construct(JWTAuth $auth)
-  {
-    $this->auth = $auth;
-    $this->middleware(['social', 'web']);
-  }
+  // public function __construct(JWTAuth $auth)
+  // {
+  //   $this->auth = $auth;
+  //   $this->middleware(['social', 'web']);
+  // }
 
   public function redirect($service)
   {
-
-    return Socialite::driver($service)->stateless()->redirect();
+    $redirectUrl = Socialite::driver('google')->stateless()->redirect()->getTargetUrl();
+    return response()->json([
+        'redirect_url' => $redirectUrl
+    ]);
+    //return Socialite::driver($service)->stateless()->redirect();
   }
 
   public function callback($service) 
@@ -37,12 +42,7 @@ class SocialLoginController extends Controller{
       //登録あればそのままログイン（2回目以降）
       Auth::login($user);
 
-      
-      $extra = [
-        "userid" => $user->id,
-        "username" => $user->name,
-      ];
-      return redirect(env('CLIENT_BASE_URL').'/auth/social-callback?token='. $this->auth->fromUser($user, $extra));
+      return redirect(env('CLIENT_BASE_URL').'/auth/social-callback?token='. $user->api_token);
 
     }else{
 
@@ -55,11 +55,8 @@ class SocialLoginController extends Controller{
 
       //そのままログイン
       Auth::login($newuser);
-      $extra = [
-        "userid" => $newuser->id,
-        "username" => $newuser->name,
-      ];
-      return redirect(env('CLIENT_BASE_URL').'/auth/social-callback?token='. $this->auth->fromUser($newuser, $extra));
+
+      return redirect(env('CLIENT_BASE_URL').'/auth/social-callback?token='. $newuser->api_token);
     }
   }
 }

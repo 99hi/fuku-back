@@ -35,7 +35,7 @@ class ClothesController extends Controller
         DB::beginTransaction();
         try {
             $newClothes = new Clothes();
-            $newClothes->user_id = 1;
+            $newClothes->user_id = 2;
             $newClothes->url = $request->url;
             $newClothes->category = $request->category;
             $newClothes->color = $request->color;
