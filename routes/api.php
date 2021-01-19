@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['cors'])->group(function () {
     Route::middleware(['auth:api'])->group(function() {
         Route::get('/user', 'UserController@user');
-    });
+        Route::get('/user/token', 'UserController@token');
+    
         Route::get('/test', 'ClothesController@test');
         Route::get('/clothes/get', 'ClothesController@index');
         Route::post('/clothes/add', 'ClothesController@add');
@@ -32,7 +33,7 @@ Route::middleware(['cors'])->group(function () {
         Route::get('/share/users', 'ShareCodeController@shareUser');
     //Route::get('/share?code={code}', 'ClothesController@shareCloset');
     
-    // }); //ログイン済み可能
+    }); //ログイン済み可能
 
     Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
         Route::get('/login/{service}', 'SocialLoginController@redirect');

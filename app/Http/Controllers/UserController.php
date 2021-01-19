@@ -14,4 +14,11 @@ class UserController extends Controller
         return Auth::user();
     }
 
+    public function token() {
+        $user = Auth::user();
+        $token = $user->api_token;
+        //return $token;
+        return response()->json(['token' => $token], 200);
+    }
+
 }
