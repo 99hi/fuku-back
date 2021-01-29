@@ -8,10 +8,22 @@ use App\Category;
 use App\Season;
 use App\Tag;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class ClothesController extends Controller
 {
-    //
+
+    private $user_id;
+    
+    public function __construct()
+    {
+		$this->middleware(function ($request, $next) {
+            $this->user_id = Auth::id();
+            return $next($request);
+        });
+    }
+
+
     public function index()
     {
         $categories = Category::select('name')->get();
@@ -21,7 +33,7 @@ class ClothesController extends Controller
                                 ->with('seasons:name')
                                 ->with('tags:name')
                                 ->where('category', $category->name)
-                                ->where('user_id', 1)
+                                ->where('user_id', $this->user_id)
                                 ->orderBy('created_at', 'desc')
                                 ->get();
             array_push($clothesList, $clothes);
@@ -35,7 +47,7 @@ class ClothesController extends Controller
         DB::beginTransaction();
         try {
             $newClothes = new Clothes();
-            $newClothes->user_id = 2;
+            $newClothes->user_id = $this->user_id;
             $newClothes->url = $request->url;
             $newClothes->category = $request->category;
             $newClothes->color = $request->color;

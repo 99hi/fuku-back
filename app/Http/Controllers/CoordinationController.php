@@ -8,12 +8,24 @@ use App\Coordination;
 use App\ClothesCoordination;
 use App\Season;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class CoordinationController extends Controller
 {
+
+    private $user_id;
+    
+    public function __construct()
+    {
+		$this->middleware(function ($request, $next) {
+            $this->user_id = Auth::id();
+            return $next($request);
+        });
+    }
+
     public function index()
     {
-        $coordination = Coordination::select('id', 'url')->with('seasons')->with(['clothes' => function ($q) {
+        $coordination = Coordination::select('id', 'url')->where('user_id', $this->user_id)->with('seasons')->with(['clothes' => function ($q) {
             $q->select('id', 'url', 'category', 'color', 'x', 'y', 'width', 'height');
         }])->orderBy('created_at', 'desc')->get();
 
@@ -25,7 +37,7 @@ class CoordinationController extends Controller
         DB::beginTransaction();
         try {
             $newCoordination = new Coordination();
-            $newCoordination->user_id = 1;
+            $newCoordination->user_id = $this->user_id;
             $newCoordination->cloudinary_id = $request->cloudinary_id;
             $newCoordination->url = $request->url;
             $newCoordination->save();

@@ -6,19 +6,10 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\User;
 use Auth;
-//use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\JWTAuth;
 
 class SocialLoginController extends Controller{
-
-  // protected $auth;
-
-  // public function __construct(JWTAuth $auth)
-  // {
-  //   $this->auth = $auth;
-  //   $this->middleware(['social', 'web']);
-  // }
 
   public function redirect($service)
   {
@@ -26,14 +17,12 @@ class SocialLoginController extends Controller{
     return response()->json([
         'redirect_url' => $redirectUrl
     ]);
-    //return Socialite::driver($service)->stateless()->redirect();
   }
 
   public function callback($service) 
   {
     $serviceUser = Socialite::driver($service)->stateless()->user();
 
-    //dd($serviceUser);
     $user = User::where(['account_id' => $serviceUser->getId()])->first();
     
 
@@ -51,6 +40,7 @@ class SocialLoginController extends Controller{
       $newuser->name = $serviceUser->getName();
       $newuser->account_id = $serviceUser->getId();
       $newuser->provider = $service;
+      $newuser->api_token = mb_substr($serviceUser->token, 0, 30);
       $newuser->save();
 
       //そのままログイン

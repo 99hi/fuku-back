@@ -31,11 +31,13 @@ Route::middleware(['cors'])->group(function () {
         Route::get('/share', 'ShareCodeController@show');
         Route::post('/share/add', 'ShareCodeController@add');
         Route::get('/share/users', 'ShareCodeController@shareUser');
+        Route::delete('/share/delete', 'ShareCodeController@delete');
     //Route::get('/share?code={code}', 'ClothesController@shareCloset');
     
     }); //ログイン済み可能
 
     Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
+        Route::get('/login/guest', 'LoginController@guestLogin');
         Route::get('/login/{service}', 'SocialLoginController@redirect');
         Route::get('/login/{service}/callback', 'SocialLoginController@callback');
     });

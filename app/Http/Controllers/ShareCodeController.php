@@ -7,13 +7,23 @@ use App\User;
 use App\Clothes;
 use App\ShareCode;
 use App\Category;
+use Auth;
 
 class ShareCodeController extends Controller
 {
-    //
+    private $user_id;
+    
+    public function __construct()
+    {
+		$this->middleware(function ($request, $next) {
+            $this->user_id = Auth::id();
+            return $next($request);
+        });
+    }
+
     public function show()
     {
-        $shareCodes = ShareCode::where('user_id', 1)->get();
+        $shareCodes = ShareCode::where('user_id', $this->user_id)->get();
         if (!$shareCodes) {
             return "ありません";
         }
@@ -42,22 +52,29 @@ class ShareCodeController extends Controller
 
     public function add(Request $request)
     {
-        $code = "98765432";
-        $newShare = new ShareCode;
+        $user = User::where('share_code', $request->share_code)->first();
+        if($user) {
+            $newShare = new ShareCode;
+            $newShare->user_id = $this->user_id;
+            $newShare->closet_user_id = $user->id;
+            $newShare->share_code = $user->share_code;
+            $newShare->share_username = $request->name;
+            $newShare->save();
 
-        $user = User::select('share_code')->where('share_code', $code)->first();
-        $newShare->user_id = 1;
-        $newShare->share_code = $user->share_code;
-        $newShare->share_username = "兄";
-        $newShare->save();
+            return response()->json(["type" => "success","message" => "追加しました"]);
+        } else {
+            return response()->json(["type" => "error","message" => "コードが存在しません"]);
+        }
+    }
 
-        return $newShare;
+    public function delete(Request $request) {
+        ShareCode::where('id', $request->id)->delete();
+        return "削除しました";
     }
 
     public function shareUser()
     {
-        $users = ShareCode::where('user_id', 1)->get();
-
+        $users = ShareCode::where('user_id', $this->user_id)->get();
         return $users;
     }
 }
