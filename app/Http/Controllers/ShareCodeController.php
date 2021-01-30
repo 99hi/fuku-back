@@ -15,7 +15,7 @@ class ShareCodeController extends Controller
     
     public function __construct()
     {
-		$this->middleware(function ($request, $next) {
+        $this->middleware(function ($request, $next) {
             $this->user_id = Auth::id();
             return $next($request);
         });
@@ -53,7 +53,7 @@ class ShareCodeController extends Controller
     public function add(Request $request)
     {
         $user = User::where('share_code', $request->share_code)->first();
-        if($user) {
+        if ($user) {
             $newShare = new ShareCode;
             $newShare->user_id = $this->user_id;
             $newShare->closet_user_id = $user->id;
@@ -67,9 +67,10 @@ class ShareCodeController extends Controller
         }
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         ShareCode::where('id', $request->id)->delete();
-        return "削除しました";
+        return response()->json(["type" => "success","message" => "削除しました"]);
     }
 
     public function shareUser()
