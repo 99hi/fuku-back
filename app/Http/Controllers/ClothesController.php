@@ -12,12 +12,11 @@ use Auth;
 
 class ClothesController extends Controller
 {
-
     private $user_id;
     
     public function __construct()
     {
-		$this->middleware(function ($request, $next) {
+        $this->middleware(function ($request, $next) {
             $this->user_id = Auth::id();
             return $next($request);
         });
@@ -54,11 +53,18 @@ class ClothesController extends Controller
             $newClothes->cloudinary_id = $request->cloudinary_id;
             $newClothes->save();
 
+            $tagList = [];
+            foreach ($request->tags as $tag) {
+                // 普通に新しいのが来たら新規作成する動き
+                $record = Tag::firstOrCreate(['name' => $tag, 'user_id' => $this->user_id, 'which' => "clothes"]);
+                array_push($tagList, $record->id);
+            }
+
             //中間テーブルに追加
-            $newClothes->tags()->sync($request->tags);
+            $newClothes->tags()->sync($tagList);
             $newClothes->seasons()->sync($request->seasons);
             DB::commit();
-            return $request;
+            return $tagList;
         } catch (\Exception $e) {
             DB::rollback();
             return "エラー：".$e;
@@ -81,8 +87,8 @@ class ClothesController extends Controller
             //中間テーブル登録
             $addTags = [];
             foreach ($request->data['tags'] as $tag) {
-                $tagId = Tag::select('id')->where('name', $tag)->value('id');
-                array_push($addTags, $tagId);
+                $record = Tag::firstOrCreate(['name' => $tag, 'user_id' => $this->user_id, 'which' => "clothes"]);
+                array_push($addTags, $record->id);
             };
             $updateClothes->tags()->sync($addTags);
 

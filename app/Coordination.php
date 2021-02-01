@@ -18,4 +18,9 @@ class Coordination extends Model
     {
         return $this->belongsToMany('App\Season', 'coordinations_seasons', 'coordinations_id', 'seasons_id');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag', 'coordinations_tag', 'coordinations_id');
+    }
 }

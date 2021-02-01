@@ -16,24 +16,32 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(['cors'])->group(function () {
-    Route::middleware(['auth:api'])->group(function() {
+    Route::middleware(['auth:api'])->group(function () {
         Route::get('/user', 'UserController@user');
         Route::get('/user/token', 'UserController@token');
+
+        Route::post('/weather/set', 'UserController@setArea');
+        Route::get('/weather/get', 'UserController@getArea');
+        Route::post('/weather/display', 'UserController@display');
+
+        Route::get('/category', 'CategoryController@index');
     
-        Route::get('/test', 'ClothesController@test');
         Route::get('/clothes/get', 'ClothesController@index');
         Route::post('/clothes/add', 'ClothesController@add');
         Route::put('/clothes/update/{id}', 'ClothesController@update');
         Route::get('/clothes/{id}/coordinations', 'ClothesController@clothesCoordinations');
-        Route::get('/tag/all', 'TagController@index');
+
+        Route::get('/tag/clothes', 'TagController@clothesTag');
+        Route::get('/tag/coordinations', 'TagController@coordinationTag');
+
         Route::get('/coordination/get', 'CoordinationController@index');
         Route::post('/coordination/add', 'CoordinationController@add');
+        Route::put('/coordination/update/{id}', 'CoordinationController@update');
+
         Route::get('/share', 'ShareCodeController@show');
         Route::post('/share/add', 'ShareCodeController@add');
         Route::get('/share/users', 'ShareCodeController@shareUser');
         Route::delete('/share/delete', 'ShareCodeController@delete');
-    //Route::get('/share?code={code}', 'ClothesController@shareCloset');
-    
     }); //ログイン済み可能
 
     Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
@@ -42,10 +50,3 @@ Route::middleware(['cors'])->group(function () {
         Route::get('/login/{service}/callback', 'SocialLoginController@callback');
     });
 });
-
-
-
-
-
-
-
