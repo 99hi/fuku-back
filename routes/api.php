@@ -29,6 +29,7 @@ Route::middleware(['cors'])->group(function () {
         Route::get('/clothes/get', 'ClothesController@index');
         Route::post('/clothes/add', 'ClothesController@add');
         Route::put('/clothes/update/{id}', 'ClothesController@update');
+        Route::delete('/clothes/delete/{id}', 'ClothesController@delete');
         Route::get('/clothes/{id}/coordinations', 'ClothesController@clothesCoordinations');
 
         Route::get('/tag/clothes', 'TagController@clothesTag');

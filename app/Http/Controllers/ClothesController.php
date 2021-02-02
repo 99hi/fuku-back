@@ -114,4 +114,18 @@ class ClothesController extends Controller
         $coordinations = Clothes::select('id')->with('coordinations')->where('id', $id)->get();
         return $coordinations;
     }
+
+    public function delete($id)
+    {
+        $clothes = Clothes::with('coordinations')->where('id', $id)->first();
+        $coordinations = $clothes->coordinations;
+        foreach ($coordinations as $coordination) {
+            $coordination->delete();
+        }
+        $clothes->delete();
+
+        return response()->json(['clothes' => $clothes, 'coor' => $coordinations]);
+
+        //return response()->json(['message' => "削除しました"]);
+    }
 }
