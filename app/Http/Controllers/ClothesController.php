@@ -124,8 +124,6 @@ class ClothesController extends Controller
         }
         $clothes->delete();
 
-        return response()->json(['clothes' => $clothes, 'coor' => $coordinations]);
-
-        //return response()->json(['message' => "削除しました"]);
+        return response()->json(['message' => "削除しました"]);
     }
 }

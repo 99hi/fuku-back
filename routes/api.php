@@ -38,6 +38,7 @@ Route::middleware(['cors'])->group(function () {
         Route::get('/coordination/get', 'CoordinationController@index');
         Route::post('/coordination/add', 'CoordinationController@add');
         Route::put('/coordination/update/{id}', 'CoordinationController@update');
+        Route::delete('/coordination/delete/{id}', 'CoordinationController@delete');
 
         Route::get('/share', 'ShareCodeController@show');
         Route::post('/share/add', 'ShareCodeController@add');

@@ -105,4 +105,12 @@ class CoordinationController extends Controller
             return "エラー：".$e;
         }
     }
+
+    public function delete($id)
+    {
+        $coordination = Coordination::find($id);
+        $coordination->delete();
+
+        return response()->json(['message' => "削除しました"]);
+    }
 }
