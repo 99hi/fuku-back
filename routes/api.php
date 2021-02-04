@@ -44,6 +44,10 @@ Route::middleware(['cors'])->group(function () {
         Route::post('/share/add', 'ShareCodeController@add');
         Route::get('/share/users', 'ShareCodeController@shareUser');
         Route::delete('/share/delete', 'ShareCodeController@delete');
+
+        Route::get('/calendar', 'CalendarController@index');
+        Route::post('/calendar', 'CalendarController@add');
+        Route::delete('/calendar', 'CalendarController@delete');
     }); //ログイン済み可能
 
     Route::group(['prefix' => '/auth', ['middleware' => 'throttle:20,5']], function () {
