@@ -9,6 +9,7 @@ use App\Season;
 use App\Tag;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use Cloudinary\Api\Admin\AdminApi;
 
 class ClothesController extends Controller
 {
@@ -118,6 +119,10 @@ class ClothesController extends Controller
     public function delete($id)
     {
         $clothes = Clothes::with('coordinations')->where('id', $id)->first();
+
+        $cloudinary = new AdminApi();
+        $cloudinary->deleteAssets($clothes->cloudinary_id);
+
         $coordinations = $clothes->coordinations;
         foreach ($coordinations as $coordination) {
             $coordination->delete();

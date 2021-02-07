@@ -45,19 +45,20 @@ class ShareCodeController extends Controller
             array_push($shareCloset, $clothesList);
         }
         return $shareCloset;
-        //$returnCloset = array($shareCode->share_username => $clothesList);
-        //return $returnCloset;
-        return $clothesList;
     }
 
     public function add(Request $request)
     {
         $user = User::where('share_code', $request->share_code)->first();
+
+        if ($this->user_id === $user->id) {
+            return response()->json(["type" => "warning","message" => "自分のコードです"]);
+        }
+
         if ($user) {
             $newShare = new ShareCode;
             $newShare->user_id = $this->user_id;
             $newShare->closet_user_id = $user->id;
-            $newShare->share_code = $user->share_code;
             $newShare->share_username = $request->name;
             $newShare->save();
 

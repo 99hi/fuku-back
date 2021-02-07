@@ -19,6 +19,7 @@ Route::middleware(['cors'])->group(function () {
     Route::middleware(['auth:api'])->group(function () {
         Route::get('/user', 'UserController@user');
         Route::get('/user/token', 'UserController@token');
+        Route::put('/user/code', 'UserController@codeChange');
 
         Route::post('/weather/set', 'UserController@setArea');
         Route::get('/weather/get', 'UserController@getArea');

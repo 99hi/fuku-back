@@ -40,6 +40,7 @@ class SocialLoginController extends Controller
             $newuser->account_id = $serviceUser->getId();
             $newuser->provider = $service;
             $newuser->api_token = mb_substr($serviceUser->token, 0, 30);
+            $newuser->share_code = substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyz'), 0, 10);
             $newuser->picture = $serviceUser->avatar;
             $newuser->weather_display = false;
             $newuser->weather_area = "山口";

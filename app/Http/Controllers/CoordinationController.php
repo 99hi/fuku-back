@@ -10,6 +10,7 @@ use App\Season;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Tag;
+use Cloudinary\Api\Admin\AdminApi;
 
 class CoordinationController extends Controller
 {
@@ -109,6 +110,10 @@ class CoordinationController extends Controller
     public function delete($id)
     {
         $coordination = Coordination::find($id);
+
+        $cloudinary = new AdminApi();
+        $cloudinary->deleteAssets($coordination->cloudinary_id);
+
         $coordination->delete();
 
         return response()->json(['message' => "削除しました"]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ShareCode;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\User;
@@ -50,5 +51,13 @@ class UserController extends Controller
         $this->user->weather_display = $request->display;
         $this->user->save();
         return $this->user->weather_display;
+    }
+
+    public function codeChange()
+    {
+        ShareCode::where('closet_user_id', $this->user->id)->delete();
+        $this->user->share_code = substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyz'), 0, 10);
+        $this->user->save();
+        return response()->json(["type" => "success","message" => "更新しました"]);
     }
 }
