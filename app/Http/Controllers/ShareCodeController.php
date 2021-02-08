@@ -51,11 +51,11 @@ class ShareCodeController extends Controller
     {
         $user = User::where('share_code', $request->share_code)->first();
 
-        if ($this->user_id === $user->id) {
-            return response()->json(["type" => "warning","message" => "自分のコードです"]);
-        }
-
         if ($user) {
+            if ($this->user_id === $user->id) {
+                return response()->json(["type" => "warning","message" => "自分のコードです"]);
+            }
+
             $newShare = new ShareCode;
             $newShare->user_id = $this->user_id;
             $newShare->closet_user_id = $user->id;

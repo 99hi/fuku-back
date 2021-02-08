@@ -27,4 +27,10 @@ class TagController extends Controller
     {
         return Tag::where('user_id', $this->user_id)->where('which', "coordinations")->pluck('name');
     }
+
+    public function delete(Request $request)
+    {
+        Tag::where('user_id', $this->user_id)->where('name', $request->name)->delete();
+        return response()->json(["type" => "success","message" => "削除しました"]);
+    }
 }

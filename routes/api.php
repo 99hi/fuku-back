@@ -35,6 +35,7 @@ Route::middleware(['cors'])->group(function () {
 
         Route::get('/tag/clothes', 'TagController@clothesTag');
         Route::get('/tag/coordinations', 'TagController@coordinationTag');
+        Route::delete('/tag', 'TagController@delete');
 
         Route::get('/coordination/get', 'CoordinationController@index');
         Route::post('/coordination/add', 'CoordinationController@add');
