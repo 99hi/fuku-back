@@ -29,7 +29,7 @@ class ClothesController extends Controller
         $categories = Category::select('name')->get();
         $clothesList = [];
         foreach ($categories as $category) {
-            $clothes = Clothes::select('id', 'url', 'category', 'color', 'cloudinary_id', 'created_at', 'updated_at')
+            $clothes = Clothes::select('id', 'user_id', 'url', 'category', 'color', 'cloudinary_id', 'created_at', 'updated_at')
                                 ->with('seasons:name')
                                 ->with('tags:name')
                                 ->where('category', $category->name)

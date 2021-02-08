@@ -21,7 +21,9 @@ class CategoryTableSeeder extends Seeder
             [ 'id' => 3,
             'name' => 'パンツ'],
             [ 'id' => 4,
-            'name' => 'シューズ']
+            'name' => 'シューズ'],
+            [ 'id' => 5,
+            'name' => 'その他']
         ]);
     }
 }
